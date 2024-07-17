@@ -58,3 +58,5 @@ There's probably more things that go in the ignore file.
 - Added global.json for ASP.NET vnext
 - Added .editorconfig file in the root (x-plat IDE settings)
 - Added NuGet.config back because people were confused about it missing
+
+[Reference -  @davidfowl](https://gist.github.com/davidfowl/ed7564297c61fe9ab814)
