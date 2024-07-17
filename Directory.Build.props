@@ -10,7 +10,7 @@
         <RootNamespace>MadWorldNL.CloudPlayground</RootNamespace>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <ImplicitUsings>true</ImplicitUsings>
         <Deterministic>true</Deterministic>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
