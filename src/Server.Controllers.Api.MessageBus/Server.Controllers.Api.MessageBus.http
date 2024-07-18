@@ -1,0 +1,6 @@
+@Server.Controllers.Api.MessageBus_HostAddress = http://localhost:5273
+
+GET {{Server.Controllers.Api.MessageBus_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
