@@ -5,6 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MassTransit" />
+        <PackageReference Include="MassTransit.AspNetCore" />
+        <PackageReference Include="MassTransit.Extensions.DependencyInjection" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
@@ -13,6 +16,12 @@
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Server.Logical.Application\Application.csproj" />
+      <ProjectReference Include="..\Server.Logical.Domain\Domain.csproj" />
+      <ProjectReference Include="..\Server.Logical.MessageBus.Contracts\MessageBus.Contracts.csproj" />
     </ItemGroup>
 
 </Project>
