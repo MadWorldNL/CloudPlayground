@@ -6,6 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution-files", "solution-
 		Directory.Packages.props = Directory.Packages.props
 		README.md = README.md
 		Nuget.Config = Nuget.Config
+		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A09202E6-A1E3-4DC5-8F47-7B78288DD5FE}"
