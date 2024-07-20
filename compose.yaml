@@ -2,6 +2,7 @@ name: cloud-playground
 services:
   my-api-web:
     image: cloud-playground/api-web
+    profiles: [all]
     build: 
       context: .
       dockerfile: src/Server.Controllers.Api.Web/Dockerfile
@@ -17,6 +18,7 @@ services:
       - "7011:8081"
   my-api-messagebus:
     image: cloud-playground/api-messagebus
+    profiles: [all]
     build:
       context: .
       dockerfile: src/Server.Controllers.Api.MessageBus/Dockerfile
