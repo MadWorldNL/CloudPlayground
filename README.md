@@ -12,7 +12,8 @@ Download the following software
 * Docker
 * .NET 8 SDK
 
-### Installing
+### Installation 
+Installation guide for your development environment
 #### Option 1: From Docker
 * Clone this repository
 * Run this command in the root folder:
