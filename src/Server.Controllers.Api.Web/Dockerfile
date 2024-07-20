@@ -7,17 +7,21 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Server.Controllers.Api.Web/Server.Controllers.Api.Web.csproj", "src/Server.Controllers.Api.Web/"]
-RUN dotnet restore "src/Server.Controllers.Api.Web/Server.Controllers.Api.Web.csproj"
-COPY . .
-WORKDIR "/src/src/Server.Controllers.Api.Web"
-RUN dotnet build "Server.Controllers.Api.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY Directory.Build.props .
+COPY Directory.Packages.props .
+COPY Nuget.Config .
+
+COPY ["src/Server.Controllers.Api.Web/Api.Web.csproj", "src/Server.Controllers.Api.Web/"]
+RUN dotnet restore "src/Server.Controllers.Api.Web/Api.Web.csproj"
+COPY ["/src", "/src"]
+WORKDIR "/src/Server.Controllers.Api.Web"
+RUN dotnet build "Api.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Server.Controllers.Api.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Api.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Server.Controllers.Api.Web.dll"]
+ENTRYPOINT ["dotnet", "MadWorldNL.CloudPlayground.Api.Web.dll"]

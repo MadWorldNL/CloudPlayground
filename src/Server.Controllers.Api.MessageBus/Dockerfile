@@ -7,6 +7,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY Directory.Build.props .
+COPY Directory.Packages.props .
+COPY Nuget.Config .
+
 COPY ["src/Server.Controllers.Api.MessageBus/Server.Controllers.Api.MessageBus.csproj", "src/Server.Controllers.Api.MessageBus/"]
 RUN dotnet restore "src/Server.Controllers.Api.MessageBus/Server.Controllers.Api.MessageBus.csproj"
 COPY . .
@@ -20,4 +24,4 @@ RUN dotnet publish "Server.Controllers.Api.MessageBus.csproj" -c $BUILD_CONFIGUR
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Server.Controllers.Api.MessageBus.dll"]
+ENTRYPOINT ["dotnet", "MadWorldNL.CloudPlayground.Api.MessageBus.dll"]
