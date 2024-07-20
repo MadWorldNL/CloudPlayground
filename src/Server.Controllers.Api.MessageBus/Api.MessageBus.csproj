@@ -5,6 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MassTransit" />
+        <PackageReference Include="MassTransit.RabbitMQ" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
@@ -13,6 +15,11 @@
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Server.Logical.Application\Application.csproj" />
+      <ProjectReference Include="..\Server.Logical.Domain\Domain.csproj" />
     </ItemGroup>
 
 </Project>

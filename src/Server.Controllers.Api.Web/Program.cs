@@ -1,7 +1,8 @@
 using MadWorldNL.CloudPlayground.Endpoints;
+using MadWorldNL.CloudPlayground.MessageBus;
 using MadWorldNL.CloudPlayground.Tests;
 using MassTransit;
-using MassTransit.MultiBus;
+using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +13,28 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.SetKebabCaseEndpointNameFormatter();
+    
+    x.AddConsumer<CheckMultiMessageApiStatusConsumer>();
+    
     x.AddConsumer<CheckMessageBusStatusConsumer>()
         .Endpoint(e => e.Name = "messagebus-status");
     
     x.AddRequestClient<CheckMessageBusStatus>(new Uri("exchange:messagebus-status"));
     
-    x.UsingInMemory((context, cfg) =>
+    x.UsingRabbitMq((context,cfg) =>
     {
+        var messageBusSettings  = builder.Configuration.GetSection(MessageBusSettings.Key)
+            .Get<MessageBusSettings>()!;
+        
+        cfg.Host(messageBusSettings.Host, messageBusSettings.Port, "/", h => {
+            h.Username(messageBusSettings.Username);
+            h.Password(messageBusSettings.Password);
+        });
+        
         cfg.ConfigureEndpoints(context);
+        
+        EndpointConvention.Map<CheckMessageApiStatus>(new Uri($"rabbitmq://{messageBusSettings.Host}:{messageBusSettings.Port}/{nameof(CheckMessageApiStatus)}"));
     });
 });
 

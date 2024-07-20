@@ -8,6 +8,7 @@
         <PackageReference Include="MassTransit" />
         <PackageReference Include="MassTransit.AspNetCore" />
         <PackageReference Include="MassTransit.Extensions.DependencyInjection" />
+        <PackageReference Include="MassTransit.RabbitMQ" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
