@@ -2,7 +2,6 @@ using MadWorldNL.CloudPlayground.Endpoints;
 using MadWorldNL.CloudPlayground.MessageBus;
 using MadWorldNL.CloudPlayground.Tests;
 using MassTransit;
-using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +17,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<CheckMultiMessageApiStatusConsumer>();
     
     x.AddConsumer<CheckMessageBusStatusConsumer>()
-        .Endpoint(e => e.Name = "messagebus-status");
+        .Endpoint(e => e.Name = nameof(CheckMessageBusStatus));
     
-    x.AddRequestClient<CheckMessageBusStatus>(new Uri("exchange:messagebus-status"));
+    x.AddRequestClient<CheckMessageBusStatus>(new Uri($"exchange:{nameof(CheckMessageBusStatus)}"));
     
     x.UsingRabbitMq((context,cfg) =>
     {
@@ -34,7 +33,7 @@ builder.Services.AddMassTransit(x =>
         
         cfg.ConfigureEndpoints(context);
         
-        EndpointConvention.Map<CheckMessageApiStatus>(new Uri($"rabbitmq://{messageBusSettings.Host}:{messageBusSettings.Port}/{nameof(CheckMessageApiStatus)}"));
+        EndpointConvention.Map<CheckMessageApiStatus>(new Uri($"exchange:{nameof(CheckMessageApiStatus)}"));
     });
 });
 
