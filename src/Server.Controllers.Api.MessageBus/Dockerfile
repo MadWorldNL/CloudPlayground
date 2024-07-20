@@ -11,15 +11,15 @@ COPY Directory.Build.props .
 COPY Directory.Packages.props .
 COPY Nuget.Config .
 
-COPY ["src/Server.Controllers.Api.MessageBus/Server.Controllers.Api.MessageBus.csproj", "src/Server.Controllers.Api.MessageBus/"]
-RUN dotnet restore "src/Server.Controllers.Api.MessageBus/Server.Controllers.Api.MessageBus.csproj"
-COPY . .
-WORKDIR "/src/src/Server.Controllers.Api.MessageBus"
-RUN dotnet build "Server.Controllers.Api.MessageBus.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY ["src/Server.Controllers.Api.MessageBus/Api.MessageBus.csproj", "src/Server.Controllers.Api.MessageBus/"]
+RUN dotnet restore "src/Server.Controllers.Api.MessageBus/Api.MessageBus.csproj"
+COPY ["/src", "/src"]
+WORKDIR "/src/Server.Controllers.Api.MessageBus"
+RUN dotnet build "Api.MessageBus.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Server.Controllers.Api.MessageBus.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Api.MessageBus.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

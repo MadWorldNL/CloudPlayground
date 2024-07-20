@@ -1,4 +1,3 @@
-version: "0.1"
 name: cloud-playground
 services:
   my-api-web:
@@ -9,11 +8,28 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - "MessageBus__Host=host.docker.internal"
     ports:
       - "7010:8080"
       - "7011:8081"
+  my-api-messagebus:
+    image: cloud-playground/api-messagebus
+    build:
+      context: .
+      dockerfile: src/Server.Controllers.Api.MessageBus/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    environment:
+      - "MessageBus__Host=host.docker.internal"
+    ports:
+      - "7012:8080"
+      - "7013:8081"
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -25,6 +41,11 @@ services:
       - "5432:5432"
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   rabbitmq:
     container_name: rabbitmq
     hostname: my-rabbit
