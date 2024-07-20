@@ -31,7 +31,7 @@ docker compose up
   * Api.Web
 * Press run
 
-## Running the tests
+### Running the tests
 *TODO*
 
 ## Deployment
