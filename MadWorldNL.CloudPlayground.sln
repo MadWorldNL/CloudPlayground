@@ -49,6 +49,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\buid-api-messagebus.yaml = .github\workflows\buid-api-messagebus.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{0071DA9F-EC04-4E6E-89F7-AD1C4A1A6711}"
+	ProjectSection(SolutionItems) = preProject
+		docs\version.md = docs\version.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +75,7 @@ Global
 		{B01EC841-D9CE-4138-8DF3-314BD969A863} = {71B07342-D218-41EC-BD65-B7B6B2F991EA}
 		{2D54B30C-6C0C-4BF8-B38D-2AE69F484DAF} = {6EE8618B-A37D-43B6-B804-3E8573DA3A6A}
 		{1E0B51E2-433B-498D-8246-C9F2A263A1EA} = {71B07342-D218-41EC-BD65-B7B6B2F991EA}
+		{0071DA9F-EC04-4E6E-89F7-AD1C4A1A6711} = {C5A14B95-C47A-46D6-964C-CA4DEFCB5E90}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1A87BA9C-0457-4240-9B88-77194705A90F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
