@@ -11,6 +11,11 @@
         <PackageReference Include="MassTransit.Extensions.DependencyInjection" />
         <PackageReference Include="MassTransit.RabbitMQ" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="OpenTelemetry.Exporter.Console" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
@@ -24,6 +29,11 @@
       <ProjectReference Include="..\Server.Logical.Application\Application.csproj" />
       <ProjectReference Include="..\Server.Logical.Domain\Domain.csproj" />
       <ProjectReference Include="..\Server.Logical.MessageBus.Contracts\MessageBus.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageVersion Update="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+      <PackageVersion Update="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
     </ItemGroup>
 
 </Project>

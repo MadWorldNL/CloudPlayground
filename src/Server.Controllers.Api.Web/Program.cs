@@ -2,6 +2,12 @@ using MadWorldNL.CloudPlayground.Endpoints;
 using MadWorldNL.CloudPlayground.MessageBus;
 using MadWorldNL.CloudPlayground.Tests;
 using MassTransit;
+using OpenTelemetry;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +41,27 @@ builder.Services.AddMassTransit(x =>
         
         EndpointConvention.Map<CheckMessageApiStatus>(new Uri($"exchange:{nameof(CheckMessageApiStatus)}"));
     });
+});
+
+// Add OpenTelemetry logging provider by calling the WithLogging extension.
+builder.Services.AddOpenTelemetry()
+    .UseOtlpExporter(OtlpExportProtocol.Grpc, new Uri("http://localhost:4317"))
+    .WithTracing(b => b.SetResourceBuilder(
+            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+    ).WithMetrics(b => b.SetResourceBuilder(
+            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
+        .AddMeter(builder.Environment.ApplicationName)
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation())
+    .WithLogging(b => b.SetResourceBuilder(
+            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName)));
+
+builder.Logging.AddOpenTelemetry(option =>
+{
+    option.IncludeScopes = true;
+    option.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName));
 });
 
 var app = builder.Build();
