@@ -1,3 +1,4 @@
+using MadWorldNL.CloudPlayground.Diagnostics;
 using MadWorldNL.CloudPlayground.Endpoints;
 using MadWorldNL.CloudPlayground.MessageBus;
 using MadWorldNL.CloudPlayground.Tests;
@@ -43,25 +44,37 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+builder.Services.AddSingleton<DiagnosticsConfig>();
+
 // Add OpenTelemetry logging provider by calling the WithLogging extension.
 builder.Services.AddOpenTelemetry()
-    .UseOtlpExporter(OtlpExportProtocol.Grpc, new Uri("http://localhost:4317"))
-    .WithTracing(b => b.SetResourceBuilder(
-            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-    ).WithMetrics(b => b.SetResourceBuilder(
-            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
-        .AddMeter(builder.Environment.ApplicationName)
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation())
-    .WithLogging(b => b.SetResourceBuilder(
-            ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName)));
+    .WithTracing(b => 
+        b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(DiagnosticsConfig.ServiceName))
+            .AddSource(DiagnosticsConfig.ServiceName)
+            .SetSampler(new AlwaysOnSampler())
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddConsoleExporter()
+            .AddOtlpExporter()
+    ).WithMetrics(b => 
+        b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(DiagnosticsConfig.ServiceName))
+            .AddMeter(DiagnosticsConfig.ServiceName)
+            
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddConsoleExporter()
+            .AddOtlpExporter())
+    .WithLogging(b =>
+        b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(DiagnosticsConfig.ServiceName))
+            .AddConsoleExporter()
+            .AddOtlpExporter());
 
 builder.Logging.AddOpenTelemetry(option =>
 {
     option.IncludeScopes = true;
-    option.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName));
+    option.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(DiagnosticsConfig.ServiceName));
+    option.AddConsoleExporter()
+        .AddOtlpExporter();
 });
 
 var app = builder.Build();

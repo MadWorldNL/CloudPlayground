@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using MadWorldNL.CloudPlayground.Diagnostics;
 using MadWorldNL.CloudPlayground.Tests;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +12,11 @@ public static class TestsEndpoints
     {
         var tests = app.MapGroup("/Tests");
         
-        tests.MapGet("/CheckMessageBusStatus", async ([FromServices] IRequestClient<CheckMessageBusStatus> client, CancellationToken cancellationToken) =>
+        tests.MapGet("/CheckMessageBusStatus", async ([FromServices] IRequestClient<CheckMessageBusStatus> client, [FromServices] DiagnosticsConfig diagnosticsConfig, CancellationToken cancellationToken) =>
         {
+            using var activity = diagnosticsConfig.Source.StartActivity("Test Message Bus")!;
+            activity.AddEvent(new ActivityEvent("Trigger check is message bus healthy"));
+            
             var response = await client.GetResponse<MessageBusStatusResult>(new CheckMessageBusStatus(), cancellationToken);
             return Results.Ok(response.Message);
         }).WithOpenApi();
